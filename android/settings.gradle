@@ -1,0 +1,3 @@
+rootProject.name = 'reactnativeflatlist'
+
+include ':app'
