@@ -6,101 +6,123 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, FlatList, Button} from 'react-native';
+import React, { Component } from "react";
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  Button,
+} from "react-native";
 
-
-const messages = [
-  1,2,3,4,5,6,7,8,9,10,11,12,13
-]
+const messages = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
 
 const hash = {
   1: {
     id: 1,
     message: "hello there",
-    status: 'pending'
+    status: "pending",
   },
   2: {
     id: 2,
     message: "hello there",
-    status: 'pending'
+    status: "pending",
   },
   3: {
     id: 3,
     message: "hello there",
-    status: 'pending'
+    status: "pending",
   },
   4: {
     id: 4,
     message: "hello there",
-    status: 'pending'
+    status: "pending",
   },
   5: {
     id: 5,
     message: "hello there",
-    status: 'pending'
+    status: "pending",
   },
-  6:{
+  6: {
     id: 6,
     message: "hello there",
-    status: 'pending'
+    status: "pending",
   },
   7: {
     id: 7,
     message: "hello there",
-    status: 'pending'
+    status: "pending",
   },
   8: {
     id: 8,
     message: "hello there",
-    status: 'pending'
+    status: "pending",
   },
   9: {
     id: 9,
     message: "hello there",
-    status: 'pending'
+    status: "pending",
   },
   10: {
     id: 10,
     message: "hello there",
-    status: 'pending'
+    status: "pending",
   },
   11: {
     id: 11,
     message: "hello there",
-    status: 'pending'
+    status: "pending",
   },
-  12:{
+  12: {
     id: 12,
     message: "hello there",
-    status: 'pending'
+    status: "pending",
   },
   13: {
     id: 13,
     message: "hello there",
-    status: 'pending'
-  }
-}
+    status: "pending",
+  },
+};
 export default class App extends Component {
+  constructor() {
+    super();
+    // React Native components only update when the state changes
+    // Don't forget to use the state and setState to trigger changes
+    this.state = {
+      dataSource: hash,
+    };
+  }
 
-  renderRow = ({item, index}) => {
-    return(
+  renderRow = ({ item, index }) => {
+    return (
       <View style={styles.row}>
         <View>
           <Text>{item.message}</Text>
           <Text>{item.status}</Text>
         </View>
-        <Button style={styles.button} title='Update' onPress={() => this.update(item)}/>
+        <Button
+          style={styles.button}
+          title="Update"
+          onPress={() => this.update(item)}
+        />
       </View>
-    )
+    );
   };
 
-  update = item =>{
-    Object.assign(item, { status: 'sent' })
-    return item
-  }
+  update = item => {
+    Object.assign(item, { status: "sent" });
 
-  keyExtractor = (item) => `${item.id}`;
+    this.setState(
+      {
+        dataSource: Object.assign({ item }, this.state.dataSource),
+      },
+      () => console.log("update", this.state.dataSource),
+    );
+  };
+
+  keyExtractor = (item, index) => item.id;
 
   render() {
     return (
@@ -111,14 +133,14 @@ export default class App extends Component {
           scrollEventThrottle={100}
           data={messages}
           onScroll={this.handleOnScroll}
-          extraData={hash}
-          keyExtractor={this.keyExtractor}
-          ref={(ref) => (this.flatListRef = ref)}
+          extraData={this.state.dataSource}
+          keyExtractor={this._keyExtractor}
+          ref={ref => (this.flatListRef = ref)}
           automaticallyAdjustContentInsets={false}
           contentContainerStyle={styles.contentContainerStyle}
-          renderItem={({item, index}) => (
-            this.renderRow({item: hash[item], index})
-          )}
+          renderItem={({ item, index }) =>
+            this.renderRow({ item: hash[item], index })
+          }
         />
       </View>
     );
@@ -128,20 +150,20 @@ export default class App extends Component {
 const styles = StyleSheet.create({
   row: {
     padding: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between'
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   button: {
-    width: 30
+    width: 30,
   },
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F5FCFF",
   },
   contentContainerStyle: {
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
   },
 });
